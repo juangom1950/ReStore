@@ -1,5 +1,4 @@
-import { useState } from 'react';
-import { isTemplateTail } from 'typescript';
+import { useEffect, useState } from 'react';
 
 function App() {
 
@@ -8,6 +7,12 @@ function App() {
     {name: 'produc1', price: 100.00},
     {name: 'produc1', price: 200.00},
   ]);
+
+  useEffect(() => {
+    fetch('http://localhost:5000/api/products')
+     .then(response => response.json())
+     .then(data => setProducts(data))
+  }, [])
 
   function addProduct() {
     setProducts(prevState => [...prevState,

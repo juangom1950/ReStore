@@ -34,6 +34,11 @@ namespace API
             {
                 opt.UseSqlite(Configuration.GetConnectionString("DefaultConnection"));
             });
+            //Add this to allow CORS (Cross Origin Resource Sharing)
+            // What is CORS https://developer.mozilla.org/en-US/docs/Web/HTTP/CORS
+            //(CORS) is an HTTP-header based mechanism that allows a server to indicate any origins 
+            //(domain, scheme, or port) other than its own from which a browser should permit loading resources.
+            services.AddCors();
         }
 
         // This method gets called by the runtime. Use this method to configure the HTTP request pipeline.
@@ -50,6 +55,11 @@ namespace API
             //app.UseHttpsRedirection();
 
             app.UseRouting();
+            // Add this here to allow CORS. It needs to be added here, the order is important.
+            app.UseCors(opt => 
+            {
+                opt.AllowAnyHeader().AllowAnyMethod().WithOrigins("http://localhost:3000");
+            });
 
             app.UseAuthorization();
 
