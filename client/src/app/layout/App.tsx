@@ -1,7 +1,8 @@
-import { Typography } from '@mui/material';
+import { Container, CssBaseline, Typography } from '@mui/material';
 import { useEffect, useState } from 'react';
 import Catalog from '../../features/catalog/Catalog';
 import { Product } from '../models/products';
+import Header from './Header';
 
 function App() {
 
@@ -30,8 +31,13 @@ function App() {
   return (
     //this is jsx
     <>
-      <Typography variant='h1'>Re-Store</Typography>
-      <Catalog products={products} addProduct={addProduct}/>
+      {/* Use this Material UI component to get away of the padding that the browser lives arround */}
+      <CssBaseline/>
+      <Header/>
+      {/* Container is a material ui component */}
+      <Container>
+        <Catalog products={products} addProduct={addProduct}/>
+      </Container>
     </>
   );
 }
