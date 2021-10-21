@@ -1,4 +1,6 @@
+import { Typography } from '@mui/material';
 import { useEffect, useState } from 'react';
+import Catalog from '../../features/catalog/Catalog';
 import { Product } from '../models/products';
 
 function App() {
@@ -27,15 +29,10 @@ function App() {
 
   return (
     //this is jsx
-    <div>
-      <h1>Re-Store</h1>
-      <ul>
-        {products.map(product => (
-          <li key={product.id}>{product.name} - {product.price}</li>
-        ))}
-      </ul>
-      <button onClick={addProduct}>App Product</button>
-    </div>
+    <>
+      <Typography variant='h1'>Re-Store</Typography>
+      <Catalog products={products} addProduct={addProduct}/>
+    </>
   );
 }
 
