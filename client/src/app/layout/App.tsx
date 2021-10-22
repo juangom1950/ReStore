@@ -1,44 +1,30 @@
-import { Container, CssBaseline, Typography } from '@mui/material';
-import { useEffect, useState } from 'react';
+import { ThemeProvider } from '@emotion/react';
+import { Container, CssBaseline, createTheme } from '@mui/material';
+import { useState } from 'react';
 import Catalog from '../../features/catalog/Catalog';
-import { Product } from '../models/products';
 import Header from './Header';
 
 function App() {
-
-  //For typescript we check the types that this is returning.
-  //In this case it is an array of Product
-  const [products, setProducts] = useState<Product[]>([]);
-
-  useEffect(() => {
-    fetch('http://localhost:5000/api/products')
-     .then(response => response.json())
-     .then(data => setProducts(data))
-  }, [])
-
-  function addProduct() {
-    setProducts(prevState => [...prevState,
-      {
-        id: prevState.length + 101,
-        name:'product' + (prevState.length + 1), 
-        price: (prevState.length * 100) + 100,
-        brand: "some brand",
-        description: "some description",
-        pictureUrl: "http://picsum.photos/200"
-      }]);
-  }
+  const [darkMode, setDarkMode] = useState(false);
+  const paletteType = darkMode ? 'dark' : 'light';
+  const theme = createTheme({
+    
+    palette: {
+      mode: paletteType
+    }
+  })
 
   return (
     //this is jsx
-    <>
+    <ThemeProvider theme={theme}>
       {/* Use this Material UI component to get away of the padding that the browser lives arround */}
       <CssBaseline/>
       <Header/>
       {/* Container is a material ui component */}
       <Container>
-        <Catalog products={products} addProduct={addProduct}/>
+        <Catalog/>
       </Container>
-    </>
+    </ThemeProvider>
   );
 }
 
