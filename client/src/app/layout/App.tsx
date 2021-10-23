@@ -10,16 +10,23 @@ function App() {
   const theme = createTheme({
     
     palette: {
-      mode: paletteType
+      mode: paletteType,
+      background: {
+        default: paletteType === 'light' ? '#eaeaea' : '#121212'
+      }
     }
   })
+
+  function handleThemeChange() {
+    setDarkMode(!darkMode);
+  }
 
   return (
     //this is jsx
     <ThemeProvider theme={theme}>
       {/* Use this Material UI component to get away of the padding that the browser lives arround */}
       <CssBaseline/>
-      <Header/>
+      <Header darkMode={darkMode} handleThemeChange={handleThemeChange}/>
       {/* Container is a material ui component */}
       <Container>
         <Catalog/>
