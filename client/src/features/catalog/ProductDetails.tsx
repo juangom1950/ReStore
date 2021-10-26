@@ -1,6 +1,4 @@
 import { Divider, Grid, Table, TableBody, TableCell, TableContainer, TableRow, Typography } from "@mui/material";
-import axios from "axios";
-//import axios from "axios";
 import { useEffect, useState } from "react";
 import { useParams } from "react-router";
 import agent from "../../app/api/agent";
@@ -17,7 +15,8 @@ export default function ProductDetails() {
          //axios.get(`http://localhost:5000/api/products/${id}`)
         agent.Catalog.details(parseInt(id))
             .then((response:unknown) => setProduct(response))
-            .catch(error => console.log(error))
+            //error.response give us the full axios response for the error
+            .catch(error => console.log(error.response))
             .finally(() => setLoading(false));
     }, [id])
 
@@ -54,7 +53,7 @@ export default function ProductDetails() {
                            <TableCell>{product.brand}</TableCell>
                        </TableRow>
                        <TableRow>
-                           <TableCell>Name</TableCell>
+                           <TableCell>Quantity</TableCell>
                            <TableCell>{product.quantityInStock}</TableCell>
                        </TableRow>
                    </TableBody>
