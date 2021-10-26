@@ -1,7 +1,9 @@
 import { Divider, Grid, Table, TableBody, TableCell, TableContainer, TableRow, Typography } from "@mui/material";
 import axios from "axios";
+//import axios from "axios";
 import { useEffect, useState } from "react";
 import { useParams } from "react-router";
+import agent from "../../app/api/agent";
 import { Product } from "../../app/models/products";
 
 export default function ProductDetails() {
@@ -10,9 +12,11 @@ export default function ProductDetails() {
     const [product, setProduct] = useState<Product | any >(null);
     const [loading, setLoading] = useState(true);
 
+    //Typescript unknown vs any: https://stackoverflow.com/questions/51439843/unknown-vs-any
     useEffect(() => {
-        axios.get(`http://localhost:5000/api/products/${id}`)
-            .then(response => setProduct(response.data))
+         //axios.get(`http://localhost:5000/api/products/${id}`)
+        agent.Catalog.details(parseInt(id))
+            .then((response:unknown) => setProduct(response))
             .catch(error => console.log(error))
             .finally(() => setLoading(false));
     }, [id])
