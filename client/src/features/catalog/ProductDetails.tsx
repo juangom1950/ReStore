@@ -16,7 +16,8 @@ export default function ProductDetails() {
         agent.Catalog.details(parseInt(id))
             .then((response:unknown) => setProduct(response))
             //error.response give us the full axios response for the error
-            .catch(error => console.log(error.response))
+            //We took the response away now, because we are doing it from the interceptors
+            .catch(error => console.log(error))
             .finally(() => setLoading(false));
     }, [id])
 

@@ -1,8 +1,18 @@
-import axios, {AxiosResponse} from "axios";
+import axios, {AxiosError, AxiosResponse} from "axios";
 
 axios.defaults.baseURL = 'http://localhost:5000/api/';
 
 const responseBody = (response: AxiosResponse) => response.data;
+
+//We need to choose if we want to intersept the request on the way out or the 
+//response that we get on the way back from the API. We are intersted in the 
+//response in this case
+axios.interceptors.response.use(response => {
+    return response
+}, (error: AxiosError) => {
+    console.log('caught by intercepotor');
+    return Promise.reject(error.response);
+})
 
 const requests = {
     get: (url: string) => axios.get(url).then(responseBody),
