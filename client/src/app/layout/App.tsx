@@ -2,12 +2,14 @@ import { ThemeProvider } from '@emotion/react';
 import { Container, CssBaseline, createTheme } from '@mui/material';
 import { useState } from 'react';
 import { Route } from 'react-router';
+import { ToastContainer } from 'react-toastify';
 import AboutPage from '../../features/about/AboutPage';
 import Catalog from '../../features/catalog/Catalog';
 import ProductDetails from '../../features/catalog/ProductDetails';
 import ContactPage from '../../features/contact/ContactPage';
 import HomePage from '../../features/home/HomePage';
 import Header from './Header';
+import 'react-toastify/dist/ReactToastify.css';
 
 function App() {
   const [darkMode, setDarkMode] = useState(false);
@@ -29,6 +31,7 @@ function App() {
   return (
     //this is jsx
     <ThemeProvider theme={theme}>
+      <ToastContainer position='bottom-right' theme='colored' hideProgressBar />
       {/* Use this Material UI component to get away of the padding that the browser lives arround */}
       <CssBaseline/>
       <Header darkMode={darkMode} handleThemeChange={handleThemeChange}/>

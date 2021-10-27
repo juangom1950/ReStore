@@ -53,3 +53,5 @@
 /Users/juan/juansRepos/Neil-Build-ecommerce-dotNet-React-Redux/ReStore/API/bin/Debug/net5.0/runtimes/win-arm64/native/e_sqlite3.dll
 /Users/juan/juansRepos/Neil-Build-ecommerce-dotNet-React-Redux/ReStore/API/bin/Debug/net5.0/runtimes/win-x64/native/e_sqlite3.dll
 /Users/juan/juansRepos/Neil-Build-ecommerce-dotNet-React-Redux/ReStore/API/bin/Debug/net5.0/runtimes/win-x86/native/e_sqlite3.dll
+/Users/juan/juansRepos/Neil-Build-ecommerce-dotNet-React-Redux/ReStore/API/bin/Debug/net5.0/package-lock.json
+/Users/juan/juansRepos/Neil-Build-ecommerce-dotNet-React-Redux/ReStore/API/bin/Debug/net5.0/package.json
