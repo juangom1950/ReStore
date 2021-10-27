@@ -3,6 +3,7 @@ import { useEffect, useState } from "react";
 import { useParams } from "react-router";
 import agent from "../../app/api/agent";
 import NotFound from "../../app/api/errors/NotFound";
+import LoadingComponent from "../../app/layout/loadingComponent";
 import { Product } from "../../app/models/products";
 
 export default function ProductDetails() {
@@ -22,7 +23,7 @@ export default function ProductDetails() {
             .finally(() => setLoading(false));
     }, [id])
 
-    if (loading) return <h3>Loading...</h3>
+    if (loading) return <LoadingComponent message='Loading Products...'/>
 
     if (!product) return <NotFound/>
 
