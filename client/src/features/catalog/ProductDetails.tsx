@@ -2,6 +2,7 @@ import { Divider, Grid, Table, TableBody, TableCell, TableContainer, TableRow, T
 import { useEffect, useState } from "react";
 import { useParams } from "react-router";
 import agent from "../../app/api/agent";
+import NotFound from "../../app/api/errors/NotFound";
 import { Product } from "../../app/models/products";
 
 export default function ProductDetails() {
@@ -23,7 +24,7 @@ export default function ProductDetails() {
 
     if (loading) return <h3>Loading...</h3>
 
-    if (!product) return <h3>Product not found</h3>
+    if (!product) return <NotFound/>
 
     return (
        <Grid container spacing={6}>
