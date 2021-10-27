@@ -15,6 +15,16 @@ axios.interceptors.response.use(response => {
     const {data, status} = error.response as any;
     switch (status) {
         case 400:
+            if (data.errors) {
+                const modelStateErrors: string[] = [];
+                for (const key in data.errors) {
+                    if (data.errors[key]) {
+                        modelStateErrors.push(data.errors[key])
+                    }
+                }
+                //Explanation: https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Array/flat
+                throw modelStateErrors.flat();
+            }
             toast.error(data.title);
             break;
         case 401:
