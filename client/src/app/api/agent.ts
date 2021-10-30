@@ -4,6 +4,8 @@ import { history } from "../..";  //This goes to index.tsx
 
 const sleep = () => new Promise(resolve => setTimeout(resolve, 500));
 axios.defaults.baseURL = 'http://localhost:5000/api/';
+// Add this to allow cookies from the API Server
+axios.defaults.withCredentials = true;
 
 const responseBody = (response: AxiosResponse) => response.data;
 
@@ -54,6 +56,13 @@ const requests = {
     delete: (url: string) => axios.delete(url).then(responseBody)
 }
 
+const Basket = {
+    get: () => requests.get('basket'),
+    // Here I need to pass an empty object at the end because it is a post
+    addItem: (productId: number, quantity = 1) => requests.post(`basket?productId=${productId}&quantity=${quantity}`, {}),
+    removeItem: (productId: number, quantity = 1) => requests.delete(`basket?productId=${productId}&quantity=${quantity}`)
+}
+
 const Catalog = {
     list: () => requests.get('products'),
     details: (id: number) => requests.get(`products/${id}`)
@@ -69,7 +78,8 @@ const TestErrors = {
 
 const agent = {
     Catalog,
-    TestErrors
+    TestErrors,
+    Basket
 }
 
 export default agent;
