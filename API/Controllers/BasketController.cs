@@ -23,36 +23,22 @@ namespace API.Controllers
             _context = context;
         }
 
-        [HttpGet]
+        [HttpGet(Name ="GetBasket")]
         public async Task<ActionResult<BasketDto>> GetBasket()
         {
             var basket = await RetrieveBasket();
 
             if (basket == null) return NotFound();
 
-            return new BasketDto
-            {
-                Id = basket.Id,
-                BuyerId = basket.BuyerId,
-                // This is called projection. We are projecting Items to BasketItemDto
-                Items = basket.Items.Select(item => new BasketItemDto
-                {
-                    ProductId = item.ProductId,
-                    Name = item.Product.Name,
-                    Price = item.Product.Price,
-                    PictureUrl = item.Product.PictureUrl,
-                    Type = item.Product.Type,
-                    Brand = item.Product.Brand,
-                    Quantity = item.Quantity
-                }).ToList()
-            };
+            return MapBasketToDto(basket);
         }
 
+       
         // We add productId and quentity form the queryString
         // api/basket?productId=3&quantity=2. the names of this keys need to match with 
         // the name of this parameters.
         [HttpPost] 
-        public async Task<ActionResult> AddItemToBasket(int productId, int quantity)
+        public async Task<ActionResult<BasketDto>> AddItemToBasket(int productId, int quantity)
         {
             // get basket
             var basket = await RetrieveBasket();
@@ -72,7 +58,9 @@ namespace API.Controllers
             // save changes
             var result = await _context.SaveChangesAsync() > 0;
 
-            if (result) return StatusCode(201);
+            // The "GetBasket" is adding our locatio header to our response, 
+            // 2nd parameter is the object that was added
+            if (result) return CreatedAtRoute("GetBasket", MapBasketToDto(basket));
 
             return BadRequest(new ProblemDetails{Title = "Problem saving item to basket"});
         }
@@ -114,5 +102,26 @@ namespace API.Controllers
 
             return basket;
         }
+
+        private BasketDto MapBasketToDto(Basket basket)
+        {
+            return new BasketDto
+            {
+                Id = basket.Id,
+                BuyerId = basket.BuyerId,
+                // This is called projection. We are projecting Items to BasketItemDto
+                Items = basket.Items.Select(item => new BasketItemDto
+                {
+                    ProductId = item.ProductId,
+                    Name = item.Product.Name,
+                    Price = item.Product.Price,
+                    PictureUrl = item.Product.PictureUrl,
+                    Type = item.Product.Type,
+                    Brand = item.Product.Brand,
+                    Quantity = item.Quantity
+                }).ToList()
+            };
+        }
+
     }
 }

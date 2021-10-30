@@ -62,7 +62,8 @@ namespace API
             // Add this here to allow CORS. It needs to be added here, the order is important.
             app.UseCors(opt => 
             {
-                opt.AllowAnyHeader().AllowAnyMethod().WithOrigins("http://localhost:3000");
+                // AllowCredentials will allow to pass cookies to or from our clients on a different domain
+                opt.AllowAnyHeader().AllowAnyMethod().AllowCredentials().WithOrigins("http://localhost:3000");
             });
 
             app.UseAuthorization();
