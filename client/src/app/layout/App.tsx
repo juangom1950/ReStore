@@ -12,6 +12,7 @@ import Header from './Header';
 import 'react-toastify/dist/ReactToastify.css';
 import ServerError from '../api/errors/ServerError';
 import NotFound from '../api/errors/NotFound';
+import BasketPage from '../../features/basket/BasketPage';
 
 function App() {
   const [darkMode, setDarkMode] = useState(false);
@@ -47,6 +48,7 @@ function App() {
           <Route path='/about' component={AboutPage} />
           <Route path='/contact' component={ContactPage} />
           <Route path='/server-error' component={ServerError} />
+          <Route path='/basket' component={BasketPage} />
           {/* If any of the above match I need to return this component */}
           <Route component={NotFound} />
         </Switch>
