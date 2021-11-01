@@ -5,13 +5,17 @@ import App from './app/layout/App';
 import reportWebVitals from './reportWebVitals';
 import { Router } from 'react-router-dom';
 import { createBrowserHistory } from "history";
+import { StoreProvider } from './app/api/context/StoreContext';
 
 export const history = createBrowserHistory();
 
 ReactDOM.render(
   <React.StrictMode>
     <Router history={history}>
-      <App />
+      {/*  This StoreProvider context gives access to this context through all the child App*/}
+      <StoreProvider>
+        <App />
+      </StoreProvider>
     </Router>
   </React.StrictMode>,
   document.getElementById('root')
