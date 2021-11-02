@@ -4,6 +4,7 @@ import { Card, CardMedia, CardContent, Typography, CardActions, Button, CardHead
 import { useState } from "react";
 import { Link } from "react-router-dom";
 import agent from "../../app/api/agent";
+import { useStoreContext } from "../../app/api/context/StoreContext";
 import { Product } from "../../app/models/products";
 
 interface Props {
@@ -12,14 +13,14 @@ interface Props {
 
 export default function ProductCard({product}: Props) {
     const [loading, setLoading] = useState(false);
+    const {setBasket} = useStoreContext();
 
     function handleAddItem(productId: number) {
         setLoading(true);
         agent.Basket.addItem(productId)
+            .then((basket:any) => setBasket(basket))
             .catch((error: any) => console.log(error))
             .finally(() => setLoading(false));
-        
-            
     }
 
     return (

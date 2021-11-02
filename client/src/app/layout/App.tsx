@@ -29,6 +29,9 @@ function App() {
         .then((basket: any) => setBasket(basket))
         .catch(error => console.log(error))
         .finally(() => setLoading(false));
+    } else {
+      // We don't need to show the loading if we don't have buyerId
+      setLoading(false);
     }
   }, [setBasket])
 

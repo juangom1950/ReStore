@@ -1,6 +1,7 @@
 import { ShoppingCart } from "@mui/icons-material"
 import { AppBar, Badge, Box, IconButton, List, ListItem, Switch, Toolbar, Typography } from "@mui/material"
 import { Link, NavLink } from "react-router-dom"
+import { useStoreContext } from "../api/context/StoreContext"
 
 interface Props {
     darkMode: boolean;
@@ -32,6 +33,11 @@ const navStyles = {
 export default function Header({darkMode, handleThemeChange}: Props) {
     // Check Material UI Documantation
     // https://mui.com/components/app-bar/
+
+    const {basket} = useStoreContext();
+    // Video: "Updating the header with the basket item count" 3:35 min
+    const itemCount = basket?.items.reduce((sum, item) => sum + item.quantity, 0);
+
     return (
         // Mat UI sx:  https://mui.com/system/the-sx-prop/#main-content
         // Material UI spacing: https://mui.com/system/the-sx-prop/#spacing
@@ -62,7 +68,7 @@ export default function Header({darkMode, handleThemeChange}: Props) {
                 
                 <Box display='flex' alignItems='center'>
                     <IconButton component={Link} to='/basket' size='large' sx={{color: 'inherit'}}>
-                        <Badge badgeContent={4} color='secondary'>
+                        <Badge badgeContent={itemCount} color='secondary'>
                             <ShoppingCart/>
                         </Badge>
                     </IconButton>
