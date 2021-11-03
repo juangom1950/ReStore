@@ -17,6 +17,7 @@ import { useStoreContext } from '../api/context/StoreContext';
 import { getCookie } from '../util/util';
 import agent from '../api/agent';
 import LoadingComponent from './loadingComponent';
+import CheckoutPage from '../../features/checkout/CheckoutPage';
 
 function App() {
   const {setBasket} = useStoreContext();
@@ -71,6 +72,7 @@ function App() {
           <Route path='/contact' component={ContactPage} />
           <Route path='/server-error' component={ServerError} />
           <Route path='/basket' component={BasketPage} />
+          <Route path='/checkout' component={CheckoutPage} />
           {/* If any of the above match I need to return this component */}
           <Route component={NotFound} />
         </Switch>
