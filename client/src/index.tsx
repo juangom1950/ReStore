@@ -11,7 +11,7 @@ import { Provider } from 'react-redux';
 
 const store = configureStore();
 //We can get what is in the store with the getState method
-console.log(store.getState());
+//console.log(store.getState());
 
 export const history = createBrowserHistory();
 
