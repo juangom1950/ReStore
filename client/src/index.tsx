@@ -5,7 +5,7 @@ import App from './app/layout/App';
 import reportWebVitals from './reportWebVitals';
 import { Router } from 'react-router-dom';
 import { createBrowserHistory } from "history";
-import { StoreProvider } from './app/api/context/StoreContext';
+//import { StoreProvider } from './app/api/context/StoreContext';
 //import { configureStore } from './app/store/configureStore';
 import { Provider } from 'react-redux';
 import { store } from './app/store/configureStore';
@@ -20,12 +20,12 @@ ReactDOM.render(
   <React.StrictMode>
     <Router history={history}>
       {/*  This StoreProvider context gives access to this context through all the child App*/}
-      <StoreProvider>
+      {/* <StoreProvider> */}
         {/* With this Redux store provider we can get access to the store througn the whole application */}
         <Provider store={store}>
           <App />
         </Provider>
-      </StoreProvider>
+      {/* </StoreProvider> */}
     </Router>
   </React.StrictMode>,
   document.getElementById('root')

@@ -3,13 +3,17 @@ import { Divider, Grid, Table, TableBody, TableCell, TableContainer, TableRow, T
 import { useEffect, useState } from "react";
 import { useParams } from "react-router";
 import agent from "../../app/api/agent";
-import { useStoreContext } from "../../app/api/context/StoreContext";
+//import { useStoreContext } from "../../app/api/context/StoreContext";
 import NotFound from "../../app/api/errors/NotFound";
 import LoadingComponent from "../../app/layout/loadingComponent";
 import { Product } from "../../app/models/products";
+import { useAppDispatch, useAppSelector } from "../../app/store/configureStore";
+import { removeItem, setBasket } from "../basket/basketSlice";
 
 export default function ProductDetails() {
-    const {basket, setBasket, removeItem} = useStoreContext();
+    //const {basket, setBasket, removeItem} = useStoreContext();
+    const {basket} = useAppSelector(state => state.basket);
+    const dispatch = useAppDispatch();
     const {id }= useParams<{id:string}>();
     //This is going to have an initial value of null
     const [product, setProduct] = useState<Product | any >(null);
@@ -44,7 +48,8 @@ export default function ProductDetails() {
         if (!item || quantity > item.quantity) {
             const updateQuantity = item ? quantity - item.quantity : quantity;
             agent.Basket.addItem(product?.id!, updateQuantity)
-                .then((basket:any) => setBasket(basket))
+                .then(basket => dispatch(setBasket(basket)))
+                //.then((basket:any) => setBasket(basket))
                 .catch(error => console.log(error))
                 .finally(() => setSubmitting(false))
         } else {
@@ -53,7 +58,8 @@ export default function ProductDetails() {
             //This is removing the quantity from the server
             agent.Basket.removeItem(product?.id!, updatedQuantity)
                 //This is reducing the quantity from the state
-                .then(() => removeItem(product?.id!, updatedQuantity))
+                .then(() => dispatch(removeItem({productId: product?.id!, quantity: updatedQuantity})))
+                //.then(() => removeItem(product?.id!, updatedQuantity))
                 .catch(error => console.log(error))
                 .finally(() => setSubmitting(false))
         }

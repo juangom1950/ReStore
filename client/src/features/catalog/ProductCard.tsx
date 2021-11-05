@@ -4,9 +4,11 @@ import { Card, CardMedia, CardContent, Typography, CardActions, Button, CardHead
 import { useState } from "react";
 import { Link } from "react-router-dom";
 import agent from "../../app/api/agent";
-import { useStoreContext } from "../../app/api/context/StoreContext";
+//import { useStoreContext } from "../../app/api/context/StoreContext";
 import { Product } from "../../app/models/products";
+import { useAppDispatch } from "../../app/store/configureStore";
 import { currencyFormat } from "../../app/util/util";
+import { setBasket } from "../basket/basketSlice";
 
 interface Props {
     product: Product
@@ -14,12 +16,14 @@ interface Props {
 
 export default function ProductCard({product}: Props) {
     const [loading, setLoading] = useState(false);
-    const {setBasket} = useStoreContext();
+    //const {setBasket} = useStoreContext();
+    const dispatch = useAppDispatch();
 
     function handleAddItem(productId: number) {
         setLoading(true);
         agent.Basket.addItem(productId)
-            .then((basket:any) => setBasket(basket))
+            .then(basket => dispatch(setBasket(basket)))
+            //.then((basket:any) => setBasket(basket))
             .catch((error: any) => console.log(error))
             .finally(() => setLoading(false));
     }

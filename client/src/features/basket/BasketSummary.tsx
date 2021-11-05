@@ -1,9 +1,12 @@
 import { TableContainer, Paper, Table, TableBody, TableRow, TableCell} from "@mui/material";
-import { useStoreContext } from "../../app/api/context/StoreContext";
+//import { useStoreContext } from "../../app/api/context/StoreContext";
+import { useAppSelector } from "../../app/store/configureStore";
 import { currencyFormat } from "../../app/util/util";
 
 export default function BasketSummary() {
-    const {basket} = useStoreContext();
+    //const {basket} = useStoreContext();
+    const {basket} = useAppSelector(state => state.basket);
+
     // 1st param is a callback function with the 1st parameter been an acumulator and the 2nd is the iteration through the array. 
     // After the callback function there is an initializer  ?? menas if it is undefine or null then return 0
     // Explatation: https://www.youtube.com/watch?v=s1XVfm5mIuU&t=598s

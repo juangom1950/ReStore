@@ -13,7 +13,7 @@ import 'react-toastify/dist/ReactToastify.css';
 import ServerError from '../api/errors/ServerError';
 import NotFound from '../api/errors/NotFound';
 import BasketPage from '../../features/basket/BasketPage';
-import { useStoreContext } from '../api/context/StoreContext';
+//import { useStoreContext } from '../api/context/StoreContext';
 import { getCookie } from '../util/util';
 import agent from '../api/agent';
 import LoadingComponent from './loadingComponent';
