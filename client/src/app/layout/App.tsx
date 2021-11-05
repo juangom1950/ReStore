@@ -18,23 +18,26 @@ import { getCookie } from '../util/util';
 import agent from '../api/agent';
 import LoadingComponent from './loadingComponent';
 import CheckoutPage from '../../features/checkout/CheckoutPage';
+import { useAppDispatch } from '../store/configureStore';
+import { setBasket } from '../../features/basket/basketSlice';
 
 function App() {
-  const {setBasket} = useStoreContext();
+  //const {setBasket} = useStoreContext();
+  const dispatch = useAppDispatch();
   const [loading, setLoading] = useState(true);
 
   useEffect(() => {
     const buyerId = getCookie('buyerId');
     if (buyerId) {
       agent.Basket.get()
-        .then((basket: any) => setBasket(basket))
+        .then((basket: any) => dispatch(setBasket(basket)))
         .catch(error => console.log(error))
         .finally(() => setLoading(false));
     } else {
       // We don't need to show the loading if we don't have buyerId
       setLoading(false);
     }
-  }, [setBasket])
+  }, [dispatch])
 
   const [darkMode, setDarkMode] = useState(false);
   const paletteType = darkMode ? 'dark' : 'light';
