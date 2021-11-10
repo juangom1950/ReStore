@@ -15,6 +15,7 @@ interface Props {
 }
 
 export default function ProductCard({product}: Props) {
+    // This "basket" is the reducer that is in "configStore.ts"
     const {status} = useAppSelector(state => state.basket);
     //const [loading, setLoading] = useState(false);
     //const {setBasket} = useStoreContext();
@@ -58,6 +59,7 @@ export default function ProductCard({product}: Props) {
             </CardContent>
             <CardActions>
                 <LoadingButton 
+                    // We need to modify the pending state.status in extraReducers that is in basetSlice.ts
                     loading={status.includes('pendingAddItem' + product.id)} 
                     onClick={() => dispatch(addBasketItemAsync({productId: product.id}))} 
                     size="small">Add to cart
