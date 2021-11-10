@@ -8,18 +8,18 @@ import NotFound from "../../app/api/errors/NotFound";
 import LoadingComponent from "../../app/layout/loadingComponent";
 import { Product } from "../../app/models/products";
 import { useAppDispatch, useAppSelector } from "../../app/store/configureStore";
-import { removeItem, setBasket } from "../basket/basketSlice";
+import { addBasketItemAsync, removeBasketItemAsync } from "../basket/basketSlice";
 
 export default function ProductDetails() {
     //const {basket, setBasket, removeItem} = useStoreContext();
-    const {basket} = useAppSelector(state => state.basket);
+    const {basket, status} = useAppSelector(state => state.basket);
     const dispatch = useAppDispatch();
     const {id }= useParams<{id:string}>();
     //This is going to have an initial value of null
     const [product, setProduct] = useState<Product | any >(null);
     const [loading, setLoading] = useState(true);
     const[quantity, setQuantity] = useState(0);
-    const [submitting, setSubmitting] = useState(false);
+
     const item = basket?.items.find(i => i.productId === product?.id);
 
     //Typescript unknown vs any: https://stackoverflow.com/questions/51439843/unknown-vs-any
@@ -43,25 +43,14 @@ export default function ProductDetails() {
     }
 
     function handleUpdateCart() {
-        setSubmitting(true);
         //Verify if we have a quantity
         if (!item || quantity > item.quantity) {
             const updateQuantity = item ? quantity - item.quantity : quantity;
-            agent.Basket.addItem(product?.id!, updateQuantity)
-                .then(basket => dispatch(setBasket(basket)))
-                //.then((basket:any) => setBasket(basket))
-                .catch(error => console.log(error))
-                .finally(() => setSubmitting(false))
+            dispatch(addBasketItemAsync({productId: product?.id!, quantity: updateQuantity}))
         } else {
             // This would give us the difference
             const updatedQuantity = item.quantity - quantity;
-            //This is removing the quantity from the server
-            agent.Basket.removeItem(product?.id!, updatedQuantity)
-                //This is reducing the quantity from the state
-                .then(() => dispatch(removeItem({productId: product?.id!, quantity: updatedQuantity})))
-                //.then(() => removeItem(product?.id!, updatedQuantity))
-                .catch(error => console.log(error))
-                .finally(() => setSubmitting(false))
+            dispatch(removeBasketItemAsync({productId: product?.id!, quantity: updatedQuantity}))
         }
     }
 
@@ -119,7 +108,7 @@ export default function ProductDetails() {
                     <Grid item xs={6}>
                         <LoadingButton
                             disabled={item?.quantity === quantity || (!item && quantity === 0)}
-                            loading={submitting}
+                            loading={status.includes('pending' + item?.productId)}
                             onClick={handleUpdateCart}
                             sx={{height: '55px'}}
                             color='primary'
