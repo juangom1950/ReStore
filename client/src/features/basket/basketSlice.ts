@@ -27,9 +27,10 @@ export const addBasketItemAsync = createAsyncThunk<Basket, {productId: number, q
     }
 )
 
-export const removeBasketItemAsync = createAsyncThunk<void, {productId: number, quantity?: number}>(
-    'basket/addBasketItemAsync',
-    async ({productId, quantity = 1}) => {
+// Here we make this quantity requier not optional (quantity?), the "name" here is optional
+export const removeBasketItemAsync = createAsyncThunk<void, {productId: number, quantity: number, name?: string}>(
+    'basket/removeBasketItemAsync',
+    async ({productId, quantity}) => {
         try {
             await agent.Basket.removeItem(productId, quantity);
         } catch (error) {
@@ -64,9 +65,15 @@ export const basketSlice = createSlice({
             state.status = 'idle';
         });
         builder.addCase(removeBasketItemAsync.pending, (state, action) => {
-            state.status = 'pendingRemoveItem' + action.meta.arg.productId;
+            // name allows as to targert the specific button being clicked.
+            //It comes from "removeBasketItemAsync" method above, and is passed by the
+            // click that trigers the dispatch(removeBasketItemAsync) in the BasketPage.tsx
+            state.status = 'pendingRemoveItem' + action.meta.arg.productId + action.meta.arg.name;
         });
         builder.addCase(removeBasketItemAsync.fulfilled, (state, action) => {
+            // These arguments are coming from "removeBasketItemAsync" method above
+            // If we don't add "quantity" in removeBasketItemAsync method above, then it is going to be null
+            // and then through Nan error
             const {productId, quantity} = action.meta.arg;
             const itemIndex = state.basket?.items.findIndex(i => i.productId === productId);
 
@@ -74,7 +81,7 @@ export const basketSlice = createSlice({
 
             // We overwrite the typescript safety with "!", because type script doesn't understand that
             // quantity could be 1 in removeBasketItemAsync above
-            state.basket!.items[itemIndex].quantity -= quantity!;
+            state.basket!.items[itemIndex].quantity -= quantity;
 
             if (state.basket?.items[itemIndex].quantity === 0) state.basket.items.splice(itemIndex, 1);
 
