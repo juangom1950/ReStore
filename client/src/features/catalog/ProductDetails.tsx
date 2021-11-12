@@ -2,22 +2,27 @@ import { LoadingButton } from "@mui/lab";
 import { Divider, Grid, Table, TableBody, TableCell, TableContainer, TableRow, TextField, Typography } from "@mui/material";
 import { useEffect, useState } from "react";
 import { useParams } from "react-router";
-import agent from "../../app/api/agent";
+//import agent from "../../app/api/agent";
 //import { useStoreContext } from "../../app/api/context/StoreContext";
 import NotFound from "../../app/api/errors/NotFound";
 import LoadingComponent from "../../app/layout/loadingComponent";
-import { Product } from "../../app/models/products";
+//import { Product } from "../../app/models/products";
 import { useAppDispatch, useAppSelector } from "../../app/store/configureStore";
 import { addBasketItemAsync, removeBasketItemAsync } from "../basket/basketSlice";
+import { fetchProductAsync, productSelectors } from "./catalogSlice";
 
 export default function ProductDetails() {
     //const {basket, setBasket, removeItem} = useStoreContext();
     const {basket, status} = useAppSelector(state => state.basket);
     const dispatch = useAppDispatch();
     const {id }= useParams<{id:string}>();
+    // Get product by id from our state
+    const product = useAppSelector(state => productSelectors.selectById(state, id));
+    // Here we are changing the name from status to productStatus
+    const {status: productStatus} = useAppSelector(state => state.catalog);
     //This is going to have an initial value of null
-    const [product, setProduct] = useState<Product | any >(null);
-    const [loading, setLoading] = useState(true);
+    //const [product, setProduct] = useState<Product | any >(null);
+    //const [loading, setLoading] = useState(true);
     const[quantity, setQuantity] = useState(0);
 
     const item = basket?.items.find(i => i.productId === product?.id);
@@ -26,15 +31,17 @@ export default function ProductDetails() {
     useEffect(() => {
 
         if (item) setQuantity(item.quantity);
+        // Get the product by id in case that it doesn't exist
+        if (!product) dispatch(fetchProductAsync(parseInt(id)));
 
          //axios.get(`http://localhost:5000/api/products/${id}`)
-        agent.Catalog.details(parseInt(id))
-            .then((response:unknown) => setProduct(response))
-            //error.response give us the full axios response for the error
-            //We took the response away now, because we are doing it from the interceptors
-            .catch(error => console.log(error))
-            .finally(() => setLoading(false));
-    }, [id, item])
+        // agent.Catalog.details(parseInt(id))
+        //     .then((response:unknown) => setProduct(response))
+        //     //error.response give us the full axios response for the error
+        //     //We took the response away now, because we are doing it from the interceptors
+        //     .catch(error => console.log(error))
+        //     .finally(() => setLoading(false));
+    }, [id, item, dispatch, product])
 
     function handleInputChange(event: any) {
         if (event.target.value >= 0) {
@@ -54,7 +61,7 @@ export default function ProductDetails() {
         }
     }
 
-    if (loading) return <LoadingComponent message='Loading Products...'/>
+    if (productStatus.includes('pending')) return <LoadingComponent message='Loading Products...'/>
 
     if (!product) return <NotFound/>
 

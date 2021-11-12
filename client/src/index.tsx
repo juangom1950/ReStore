@@ -9,7 +9,7 @@ import { createBrowserHistory } from "history";
 //import { configureStore } from './app/store/configureStore';
 import { Provider } from 'react-redux';
 import { store } from './app/store/configureStore';
-import { fetchProductsAsync } from './features/catalog/catalogSlice';
+//import { fetchProductsAsync } from './features/catalog/catalogSlice';
 
 //const store = configureStore();
 //We can get what is in the store with the getState method
@@ -17,7 +17,8 @@ import { fetchProductsAsync } from './features/catalog/catalogSlice';
 
 export const history = createBrowserHistory();
 
-store.dispatch(fetchProductsAsync());
+// This is for testing purposes
+//store.dispatch(fetchProductsAsync());
 
 ReactDOM.render(
   <React.StrictMode>
