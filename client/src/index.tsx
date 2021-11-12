@@ -9,12 +9,15 @@ import { createBrowserHistory } from "history";
 //import { configureStore } from './app/store/configureStore';
 import { Provider } from 'react-redux';
 import { store } from './app/store/configureStore';
+import { fetchProductsAsync } from './features/catalog/catalogSlice';
 
 //const store = configureStore();
 //We can get what is in the store with the getState method
 //console.log(store.getState());
 
 export const history = createBrowserHistory();
+
+store.dispatch(fetchProductsAsync());
 
 ReactDOM.render(
   <React.StrictMode>
