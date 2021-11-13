@@ -60,7 +60,7 @@ export default function ProductDetails() {
             dispatch(removeBasketItemAsync({productId: product?.id!, quantity: updatedQuantity}))
         }
     }
-
+    
     if (productStatus.includes('pending')) return <LoadingComponent message='Loading Products...'/>
 
     if (!product) return <NotFound/>
@@ -115,7 +115,7 @@ export default function ProductDetails() {
                     <Grid item xs={6}>
                         <LoadingButton
                             disabled={item?.quantity === quantity || (!item && quantity === 0)}
-                            loading={status.includes('pending' + item?.productId)}
+                            loading={status.includes('pending')}
                             onClick={handleUpdateCart}
                             sx={{height: '55px'}}
                             color='primary'

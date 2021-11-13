@@ -8,21 +8,24 @@ const productsAdapter = createEntityAdapter<Product>();
 // Returns an array of Products
 export const fetchProductsAsync = createAsyncThunk<Product[]>(
     'catalog/fetchProductsAsync',
-    async (): Promise<Product[] | any> => {
+    // This '_' value means void
+    async (_, thunkAPI): Promise<Product[] | any> => {
         try {
             return await agent.Catalog.list();
-        } catch (error) {
-            console.log(error);
+        } catch (error: any) {
+            //console.log(error);
+            return thunkAPI.rejectWithValue({error: error.data})
         }
     }
 )
 export const fetchProductAsync = createAsyncThunk<Product, number>(
     'catalog/fetchProductAsync',
-    async (productId): Promise<Product | any> => {
+    async (productId, thunkAPI): Promise<Product | any> => {
         try {
             return await agent.Catalog.details(productId);
-        } catch (error) {
-            console.log(error);
+        } catch (error: any) {
+            //console.log(error);
+            return thunkAPI.rejectWithValue({error: error.data})
         }
     }
 )
@@ -48,7 +51,9 @@ export const catalogSlice = createSlice({
             state.status = 'idle';
             state.productsLoaded = true;
         });
-        builder.addCase(fetchProductsAsync.rejected, (state) => {
+        builder.addCase(fetchProductsAsync.rejected, (state, action) => {
+            // This is going to be the error that we are returning from our API
+            console.log(action.payload)
             state.status = 'idle';
         });
         builder.addCase(fetchProductAsync.pending, (state) => {
@@ -59,7 +64,8 @@ export const catalogSlice = createSlice({
             productsAdapter.upsertOne(state, action.payload);
             state.status = 'idle';
         });
-        builder.addCase(fetchProductAsync.rejected, (state) => {
+        builder.addCase(fetchProductAsync.rejected, (state, action) => {
+            console.log(action);
             state.status = 'idle';
         })
     })
